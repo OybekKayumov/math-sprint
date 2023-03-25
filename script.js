@@ -21,8 +21,8 @@ const playAgainBtn = document.querySelector('.play-again');
 // Equations
 let questionAmount = 0;
 let equationsArray = [];
-let playerGuessArr = [];
-let bestScoreArr = [];
+let playerGuessArray = [];
+let bestScoreArray = [];
 
 // Game Page
 let firstNumber = 0;
@@ -45,44 +45,43 @@ let valueY = 0;
 function bestScoresToDOM() {
   bestScores.forEach((bestScore, index) => {
     const bestScoreEl = bestScore;
-    bestScoreEl.textContent = `${bestScoreArr[index].bestScore}s`
+    bestScoreEl.textContent = `${bestScoreArray[index].bestScore}s`;
   });
 }
 
 // check localStorage best scores
 function getSavedBestScores() {
   if (localStorage.getItem('bestScores')) {
-    bestScoreArr = JSON.parse(localStorage.bestScores);
+    bestScoreArray = JSON.parse(localStorage.bestScores);
   } else {
-    bestScoreArr = [
-      { question: 10, bestScore: finalTimeDisplay },
-      { question: 25, bestScore: finalTimeDisplay },
-      { question: 50, bestScore: finalTimeDisplay },
-      { question: 99, bestScore: finalTimeDisplay },
+    bestScoreArray = [
+      { questions: 10, bestScore: finalTimeDisplay },
+      { questions: 25, bestScore: finalTimeDisplay },
+      { questions: 50, bestScore: finalTimeDisplay },
+      { questions: 99, bestScore: finalTimeDisplay },
     ];
-
-    localStorage.setItem('bestScores', JSON.stringify(bestScoreArr));
+    localStorage.setItem('bestScores', JSON.stringify(bestScoreArray));
   }
-
   bestScoresToDOM();
 }
 
 // update best score array
 function updateBestScore() {
-  bestScoreArr.forEach((score, index) => {
-    if (questionAmount === score.questions) {
-      const savedBestScore = Number(bestScoreArr[index].bestScore);
-
+  bestScoreArray.forEach((score, index) => {
+    // Select correct Best Score to update
+    if (questionAmount == score.questions) {
+      // Return Best Score as number with one decimal
+      const savedBestScore = Number(bestScoreArray[index].bestScore);
+     // Update if the new final score is less or replacing zero
       if (savedBestScore === 0 || savedBestScore > finalTime) {
-        bestScoreArr[index].bestScore = finalTimeDisplay;
+        bestScoreArray[index].bestScore = finalTimeDisplay;
       }
     } 
   });
-
-  // update splash page
+    // update splash page
   bestScoresToDOM();
   // save to localStorage
-  localStorage.setItem('bestScores', JSON.stringify(bestScoreArr));
+  localStorage.setItem('bestScores', JSON.stringify(bestScoreArray));
 }
 
 //
@@ -91,7 +90,7 @@ function playAgain() {
   scorePage.hidden = true;
   splashPage.hidden = false;
   equationsArray = [];
-  playerGuessArr = [];
+  playerGuessArray = [];
   valueY = 0;
   playAgainBtn.hidden = true;
 }
@@ -112,13 +111,10 @@ function scoresToDOM() {
   finalTimeDisplay = finalTime.toFixed(1);
   baseTime = timePlayed.toFixed(1);
   penaltyTime = penaltyTime.toFixed(1);
-
   baseTimeEl.textContent = `Base Time: ${baseTime}s`;
   penaltyTimeEl.textContent = `Penalty: +${penaltyTime}s`;
-  finalTime.textContent = `${finalTimeDisplay}s`;
-
+  finalTimeEl.textContent = `${finalTimeDisplay}s`;
   updateBestScore();
-  
   // scroll to top
   itemContainer.scrollTo({ top: 0, behavior: 'instant' });
   showScorePage();
@@ -126,16 +122,14 @@ function scoresToDOM() {
 
 // stop timer
 function checkTime() {
-  if (playerGuessArr.length == questionAmount) {
+  if (playerGuessArray.length == questionAmount) {
     clearInterval(timer);
-
     equationsArray.forEach((equation, index) => {
-      if (equation.evaluated === playerGuessArr[index]) {
-        
+      if (equation.evaluated === playerGuessArray[index]) {        
       } else {
-        penaltyTime += 0.5
+        penaltyTime += 0.5;
       }
-    })
+    });
     finalTime = timePlayed + penaltyTime;
 
     scoresToDOM();
@@ -153,7 +147,6 @@ function startTimer() {
   timePlayed = 0;
   penaltyTime = 0;
   finalTime = 0;
-
   timer = setInterval(addTime, 100);
   gamePage.removeEventListener('click', startTimer);
 }
@@ -162,9 +155,9 @@ function startTimer() {
 function select(guessedTrue) {
   valueY += 80;
   itemContainer.scroll(0, valueY);
-
-  return guessedTrue ? playerGuessArr.push('true') : playerGuessArr('false');
+  return guessedTrue ? playerGuessArray.push('true') : playerGuessArray.push('false');
 }
+
 // displays game page
 function showGamePage() {
   gamePage.hidden = false;
@@ -199,12 +192,11 @@ function createEquations() {
     wrongFormat[0] = `${firstNumber} x ${secondNumber + 1} = ${equationValue}`;
     wrongFormat[1] = `${firstNumber} x ${secondNumber} = ${equationValue - 1}`;
     wrongFormat[2] = `${firstNumber + 1} x ${secondNumber} = ${equationValue}`;
-    const formatChoice = getRandomInt(3);
+    const formatChoice = getRandomInt(2);
     const equation = wrongFormat[formatChoice];
     equationObject = { value: equation, evaluated: 'false' };
     equationsArray.push(equationObject);
   }
-
   shuffle(equationsArray);
   // equationsToDOM();
 }
@@ -220,7 +212,7 @@ function equationsToDOM() {
 
     item.appendChild(equationText);
     itemContainer.appendChild(item);
-  })
+  });
 }
 
 // Dynamically adding correct/incorrect equations
@@ -250,49 +242,43 @@ function populateGamePage() {
 function countdownStart() {
   countdown.textContent = '3';
   setTimeout(() => {
-    countdown.textContent = '2'
+    countdown.textContent = '2';
   }, 1000);
-
   setTimeout(() => {
-    countdown.textContent = '1'
+    countdown.textContent = '1';
   }, 2000);
-
   setTimeout(() => {
-    countdown.textContent = 'GO!'
+    countdown.textContent = 'GO!';
   }, 3000);
 }
 
 // navigate from splash page
-function showCountDown() {
+function showCountdown() {
   countdownPage.hidden = false;
   splashPage.hidden = true;
-
   countdownStart();
   // createEquations();
   populateGamePage();
-
-  setTimeout( showGamePage, 400);
+  setTimeout(showGamePage, 4000);
 }
 
 // get value from radio button
 function getRadioValue() {
   let radioValue;
-  radioInputs.forEach(radioInput => {
+  radioInputs.forEach((radioInput) => {
     if (radioInput.checked) {
       radioValue = radioInput.value;
     }
-  })
+  });
   return radioValue;
 }
 
 // form amount of questions
 function selectQuestionAmount(e) {
   e.preventDefault();
-
   questionAmount = getRadioValue();
-
   if (questionAmount) {
-    showCountDown();
+    showCountdown();
   }
 }
 
@@ -303,11 +289,11 @@ startForm.addEventListener('click', () => {
     if (radioEl.children[1].checked) {
       radioEl.classList.add('selected-label');
     }
-  })
-})
+  });
+});
 
-startForm.addEventListener('submit', selectQuestionAmount);
 gamePage.addEventListener('click', startTimer);
+startForm.addEventListener('submit', selectQuestionAmount);
 
 // on load
 getSavedBestScores();

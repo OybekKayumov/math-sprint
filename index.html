@@ -61,17 +61,13 @@
 
         <!-- countdown page -->
         <div class="card" id="countdown-page" hidden>
-            <h1 class="countdown"></h1>
+            <h1 class="countdown">3</h1>
         </div>
 
         <!-- game page -->
         <div class="card" id="game-page" hidden>
-            <div class="selected-item"></div>
-            <div class="item-container">
-                <div class="item">
-                    <h1>3 x 3 = 30</h1>
-                </div>             
-            </div>
+            
+            <div class="item-container"></div>
 
             <div class="item-footer">
                 <button class="wrong" onclick="select(false)">Wrong</button>
@@ -81,7 +77,7 @@
 
         <div class="card" id="score-page" hidden>
             <div class="score-container">
-                <h1 class="title">Your time</h1>
+                <h1 class="title">Your Time</h1>
                 <h1 class="final-time"></h1>
                 <h1 class="base-time"></h1>
                 <h1 class="penalty-time"></h1>
@@ -90,9 +86,9 @@
             <!-- play again -->
             <div class="score-footer">
                 <button class="play-again" onclick="playAgain()" hidden>Play Again</button>
-
             </div>
         </div>
+
     </div>
     <!-- Script -->
     <script src="shuffle.js"></script>
