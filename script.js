@@ -40,8 +40,24 @@ let finalTimeDisplay = '0.0s';
 // Scroll
 let valueY = 0;
 
+//
+function playAgain() {
+  gamePage.addEventListener('click', startTimer);
+  scorePage.hidden = true;
+  splashPage.hidden = false;
+  equationsArray = [];
+  playerGuessArr = [];
+  valueY = 0;
+  playAgainBtn.hidden = true;
+}
+
 // 
 function showScorePage() {
+  // show play again btn
+  setTimeout(() => {
+    playAgainBtn.hidden = false;
+  }, 1000);
+
   gamePage.hidden = true;
   scorePage.hidden = false;
 }
@@ -56,6 +72,8 @@ function scoresToDOM() {
   penaltyTimeEl.textContent = `Penalty: +${penaltyTime}s`;
   finalTime.textContent = `${finalTimeDisplay}s`;
 
+  // scroll to top
+  itemContainer.scrollTo({ top: 0, behavior: 'instant' });
   showScorePage();
 }
 
