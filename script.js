@@ -40,9 +40,17 @@ let finalTimeDisplay = '0.0s';
 // Scroll
 let valueY = 0;
 
+// stop timer
+function checkTime() {
+  if (playerGuessArr.length == questionAmount) {
+    clearInterval(timer);
+  }
+}
+
 // add a tenth of a second to timePlayed
 function addTime() {
   timePlayed += 0.1;
+  checkTime();
 }
 
 // start timer
@@ -52,6 +60,7 @@ function startTimer() {
   finalTime = 0;
 
   timer = setInterval(addTime, 100);
+  gamePage.removeEventListener('click', startTimer);
 }
 
 // scroll and store user selection
