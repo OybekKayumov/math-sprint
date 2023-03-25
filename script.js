@@ -40,10 +40,40 @@ let finalTimeDisplay = '0.0s';
 // Scroll
 let valueY = 0;
 
+// 
+function showScorePage() {
+  gamePage.hidden = true;
+  scorePage.hidden = false;
+}
+
+// format and display time in DOM
+function scoresToDOM() {
+  finalTimeDisplay = finalTime.toFixed(1);
+  baseTime = timePlayed.toFixed(1);
+  penaltyTime = penaltyTime.toFixed(1);
+
+  baseTimeEl.textContent = `Base Time: ${baseTime}s`;
+  penaltyTimeEl.textContent = `Penalty: +${penaltyTime}s`;
+  finalTime.textContent = `${finalTimeDisplay}s`;
+
+  showScorePage();
+}
+
 // stop timer
 function checkTime() {
   if (playerGuessArr.length == questionAmount) {
     clearInterval(timer);
+
+    equationsArray.forEach((equation, index) => {
+      if (equation.evaluated === playerGuessArr[index]) {
+        
+      } else {
+        penaltyTime += 0.5
+      }
+    })
+    finalTime = timePlayed + penaltyTime;
+
+    scoresToDOM();
   }
 }
 
